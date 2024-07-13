@@ -51,7 +51,6 @@ $programs = [ordered]@{
 	"Adobe" = "CreativeCloud";
 	"Python" = "Python.3.12";
 	"JanDeDobbeleer" = "OhMyPosh";
-	"MSYS2" = "MSYS2";
 	"Git" = "Git";
 	"GitHub" = "GitHubDesktop";
 	"Neovim" = "Neovim";
@@ -64,12 +63,24 @@ foreach ($key in $programs.Keys) {
 	}
 }
 
-Remove-Item "$ENV:USERPROFILE\Desktop\Notion.lnk" -Force
-Remove-Item "$ENV:USERPROFILE\Desktop\Notion Calendar.lnk" -Force
-Remove-Item "$ENV:USERPROFILE\Desktop\Discord.lnk" -Force
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 
-. $PROFILE
-. ("$ENV:USERPROFILE\AppData\Local\Programs\oh-my-posh\bin\oh-my-posh.exe") font install CascadiaCode
+choco install -y mingw make
+
+# Make `refreshenv` available right away, by defining the $env:ChocolateyInstall
+# variable and importing the Chocolatey profile module.
+# Note: Using `. $PROFILE` instead *may* work, but isn't guaranteed to.
+$env:ChocolateyInstall = Convert-Path "$((Get-Command choco).Path)\..\.."   
+Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
+
+# refreshenv is now an alias for Update-SessionEnvironment
+# (rather than invoking refreshenv.cmd, the *batch file* for use with cmd.exe)
+# This should make git.exe accessible via the refreshed $env:PATH, so that it
+# can be called by name only.
+refreshenv
+
+# . ("$ENV:USERPROFILE\AppData\Local\Programs\oh-my-posh\bin\oh-my-posh.exe") font install CascadiaCode
+oh-my-posh.exe font install CascadiaCode
 
 $settingsPath = Resolve-Path "$ENV:USERPROFILE\AppData\Local\Packages\Microsoft.WindowsTerminal*\LocalState\settings.json"
 $settings = Get-Content -Path $settingsPath -Raw | ConvertFrom-Json
@@ -81,9 +92,14 @@ $settings.profiles.defaults.font = @{
 $settings | ConvertTo-Json -Depth 32 | Set-Content -Path $settingsPath
 New-Item -Type File -Path $PROFILE -Force
 Add-Content -Path $PROFILE -Value "oh-my-posh init pwsh | Invoke-Expression"
-"@
+
+git clone https://github.com/NvChad/starter $ENV:USERPROFILE\AppData\Local\nvim && nvim
+
+Remove-Item "$ENV:USERPROFILE\Desktop\Notion.lnk" -Force
+Remove-Item "$ENV:USERPROFILE\Desktop\Notion Calendar.lnk" -Force
+Remove-Item "$ENV:USERPROFILE\Desktop\GitHub Desktop.lnk" -Force
+Remove-Item "$ENV:USERPROFILE\Desktop\Discord.lnk" -Force
 :Install:
 
 :End
-pause >nul
 del "%~f0"
