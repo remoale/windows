@@ -6,6 +6,14 @@ mode 76, 30
 set "nul1=1>nul"
 set "nul2=2>nul"
 
+::  Disable QuickEdit for this cmd.exe session only
+
+reg query HKCU\Console /v QuickEdit %nul2% | find /i "0x0" %nul1% || if not defined quedit (
+	reg add HKCU\Console /v QuickEdit /t REG_DWORD /d "0" /f %nul1%
+	start cmd.exe /c "%~f0"
+	exit /b
+)
+
 ::  Elevate script as admin
 
 %nul1% fltmc || (
@@ -17,34 +25,21 @@ set "nul2=2>nul"
 	exit
 )
 
-::  Disable QuickEdit for this cmd.exe session only
-
-reg query HKCU\Console /v QuickEdit %nul2% | find /i "0x0" %nul1% || if not defined quedit (
-	reg add HKCU\Console /v QuickEdit /t REG_DWORD /d "0" /f %nul1%
-	start cmd.exe /c "%~f0"
-	exit /b
-)
-
 powershell.exe "cd %~dp0; $f=[io.file]::ReadAllText('%~f0') -Split ':Install\:.*'; Invoke-Expression ($f[1]);" & goto End
 
 :Install:
-start ms-windows-store:
-cd ~\Downloads
-Start-BitsTransfer -Source "https://cdn.winget.microsoft.com/cache/source.msix"
-Start-Process ~\Downloads\source.msix
-Write-Host -NoNewLine 'Press any key to continue...';
-$null = $Host.UI.RawUI.ReadKey('NoEcho,IncludeKeyDown');
-winget source update
-Remove-Item ~\Downloads\source.msix
+Install-PackageProvider -Name "NuGet" -Force
+Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
+Install-Script winget-install -Force
 
-$programs = @{
+$programs = [ordered]@{
 	"Microsoft" = @(
+		"DevHome",
+		"PCManager",
 		"Office",
 		"OneDrive",
 		"VisualStudioCode",
-		"PowerShell", # admin
-		"DevHome",
-		"PCManager",
+		"PowerShell",
 		"WindowsTerminal"
 	);
 	"Notion" = @(
@@ -52,8 +47,7 @@ $programs = @{
 		"NotionCalendar"
 	);
 	"Adobe" = @(
-		"CreativeCloud",
-		"Acrobat.Pro"
+		"CreativeCloud"
 	);
 	"Python" = "Python.3.12";
 	"JanDeDobbeleer" = "OhMyPosh";
@@ -61,11 +55,7 @@ $programs = @{
 	"Git" = "Git";
 	"GitHub" = "GitHubDesktop";
 	"Neovim" = "Neovim";
-	"Discord" = "Discord";
-	"" = @(
-		"9PP9GZM2GN26", # unison
-		"XPFD4T9N395QN6" # photoshop
-	)
+	"Discord" = "Discord"
 }
 
 # apple
@@ -73,11 +63,7 @@ $programs = @{
 
 foreach ($key in $programs.Keys) {
 	foreach ($value in $programs[$key]) {
-		if (-not $key) {
-			winget install $value --accept-package-agreements --accept-source-agreements
-		} else {
-			winget install "$key.$value" --accept-package-agreements --accept-source-agreements
-		}
+		winget install "$key.$value" --accept-package-agreements --accept-source-agreements
 	}
 }
 
