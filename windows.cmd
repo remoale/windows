@@ -31,6 +31,8 @@ powershell.exe "cd %~dp0; $f=[io.file]::ReadAllText('%~f0') -Split ':Install\:.*
 Install-PackageProvider -Name "NuGet" -Force
 Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
 Install-Script winget-install -Force
+Set-ExecutionPolicy Unrestricted
+winget-install -Force
 
 $programs = [ordered]@{
 	"Microsoft" = @(
@@ -71,22 +73,19 @@ Remove-Item "$ENV:USERPROFILE\Desktop\Notion.lnk" -Force
 Remove-Item "$ENV:USERPROFILE\Desktop\Notion Calendar.lnk" -Force
 Remove-Item "$ENV:USERPROFILE\Desktop\Discord.lnk" -Force
 
-@"
-Start-BitsTransfer -Source "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/CascadiaCode.zip"
-Expand-Archive CascadiaCode.zip
-Move-Item CascadiaCode\* C:\Windows\Fonts
-Remove-Item CascadiaCode.zip
-$user_profile = Resolve-Path "$ENV:USERPROFILE\AppData\Local\Packages\Microsoft.WindowsTerminal*\LocalState\settings.json"
-$face = '"defaults": 
-        {
-            "font": 
-            {
-                "face": "CaskaydiaCove Nerd Font"
-            }
-        }'
-cat $user_profile | foreach { $_ -replace '"defaults":.*{.*}', $face } > (Resolve-Path $user_profile)
-New-Item -Force -Type File -Path $PROFILE
-"oh-my-posh init pwsh | Invoke-Expression" > (Resolve-Path $PROFILE)
+. $PROFILE
+. ("$ENV:USERPROFILE\AppData\Local\Programs\oh-my-posh\bin\oh-my-posh.exe") font install CascadiaCode
+
+$settingsPath = Resolve-Path "$ENV:USERPROFILE\AppData\Local\Packages\Microsoft.WindowsTerminal*\LocalState\settings.json"
+$settings = Get-Content -Path $settingsPath -Raw | ConvertFrom-Json
+$font = "CaskaydiaCove Nerd Font"
+$settings.profiles.defaults = @{}
+$settings.profiles.defaults.font = @{
+    face = $font
+}
+$settings | ConvertTo-Json -Depth 32 | Set-Content -Path $settingsPath
+New-Item -Type File -Path $PROFILE -Force
+Add-Content -Path $PROFILE -Value "oh-my-posh init pwsh | Invoke-Expression"
 
 Start-Process cmd.exe -ArgumentList '/c git clone https://github.com/NvChad/starter %USERPROFILE%\AppData\Local\nvim && nvim'
 "@
