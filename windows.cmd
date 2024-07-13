@@ -48,9 +48,7 @@ $programs = [ordered]@{
 		"Notion",
 		"NotionCalendar"
 	);
-	"Adobe" = @(
-		"CreativeCloud"
-	);
+	"Adobe" = "CreativeCloud";
 	"Python" = "Python.3.12";
 	"JanDeDobbeleer" = "OhMyPosh";
 	"MSYS2" = "MSYS2";
@@ -59,9 +57,6 @@ $programs = [ordered]@{
 	"Neovim" = "Neovim";
 	"Discord" = "Discord"
 }
-
-# apple
-# netflix
 
 foreach ($key in $programs.Keys) {
 	foreach ($value in $programs[$key]) {
@@ -86,8 +81,6 @@ $settings.profiles.defaults.font = @{
 $settings | ConvertTo-Json -Depth 32 | Set-Content -Path $settingsPath
 New-Item -Type File -Path $PROFILE -Force
 Add-Content -Path $PROFILE -Value "oh-my-posh init pwsh | Invoke-Expression"
-
-Start-Process cmd.exe -ArgumentList '/c git clone https://github.com/NvChad/starter %USERPROFILE%\AppData\Local\nvim && nvim'
 "@
 :Install:
 
