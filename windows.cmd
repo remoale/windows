@@ -54,6 +54,7 @@ $programs = [ordered]@{
 	"Git" = "Git";
 	"GitHub" = "GitHubDesktop";
 	"Neovim" = "Neovim";
+	"Gyan" = "FFmpeg";
 	"Discord" = "Discord"
 }
 
@@ -62,6 +63,8 @@ foreach ($key in $programs.Keys) {
 		winget install "$key.$value" --accept-package-agreements --accept-source-agreements
 	}
 }
+
+New-Item -Type File -Path $PROFILE -Force
 
 Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 
@@ -79,7 +82,16 @@ Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
 # can be called by name only.
 refreshenv
 
-# . ("$ENV:USERPROFILE\AppData\Local\Programs\oh-my-posh\bin\oh-my-posh.exe") font install CascadiaCode
+$libraries = @(
+	"numpy",
+	"pandas",
+	"yt-dlp"
+)
+
+foreach ($library in $libraries) {
+	pip install $library
+}
+
 oh-my-posh.exe font install CascadiaCode
 
 $settingsPath = Resolve-Path "$ENV:USERPROFILE\AppData\Local\Packages\Microsoft.WindowsTerminal*\LocalState\settings.json"
@@ -90,10 +102,9 @@ $settings.profiles.defaults.font = @{
     face = $font
 }
 $settings | ConvertTo-Json -Depth 32 | Set-Content -Path $settingsPath
-New-Item -Type File -Path $PROFILE -Force
 Add-Content -Path $PROFILE -Value "oh-my-posh init pwsh | Invoke-Expression"
 
-git clone https://github.com/NvChad/starter $ENV:USERPROFILE\AppData\Local\nvim && nvim
+git clone https://github.com/NvChad/starter $ENV:USERPROFILE\AppData\Local\nvim; nvim
 
 Remove-Item "$ENV:USERPROFILE\Desktop\Notion.lnk" -Force
 Remove-Item "$ENV:USERPROFILE\Desktop\Notion Calendar.lnk" -Force
