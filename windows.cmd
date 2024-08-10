@@ -104,8 +104,9 @@ $settings.profiles.defaults.font = @{
     face = $font
 }
 $settings | ConvertTo-Json -Depth 32 | Set-Content -Path $settingsPath
-$profile7 = "$ENV:USERPROFILE\Documents\PowerShell\Microsoft.PowerShell_profile.ps1"
 Add-Content -Path $PROFILE -Value "oh-my-posh init pwsh | Invoke-Expression"
+$profile7 = "$ENV:USERPROFILE\Documents\PowerShell\Microsoft.PowerShell_profile.ps1"
+New-Item -Type File -Path $profile7 -Force
 Add-Content -Path $profile7 -Value "oh-my-posh init pwsh | Invoke-Expression"
 
 git clone https://github.com/NvChad/starter $ENV:USERPROFILE\AppData\Local\nvim; nvim
