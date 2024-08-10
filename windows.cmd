@@ -96,13 +96,17 @@ oh-my-posh.exe font install CascadiaCode
 
 $settingsPath = Resolve-Path "$ENV:USERPROFILE\AppData\Local\Packages\Microsoft.WindowsTerminal*\LocalState\settings.json"
 $settings = Get-Content -Path $settingsPath -Raw | ConvertFrom-Json
+$pwsh7Profile = $settings.profiles.list | Where-Object { $_.name -eq "PowerShell" }
+$settings.defaultProfile = $pwsh7Profile.guid
 $font = "CaskaydiaCove Nerd Font"
 $settings.profiles.defaults = @{}
 $settings.profiles.defaults.font = @{
     face = $font
 }
 $settings | ConvertTo-Json -Depth 32 | Set-Content -Path $settingsPath
+$profile7 = "$ENV:USERPROFILE\Documents\PowerShell\Microsoft.PowerShell_profile.ps1"
 Add-Content -Path $PROFILE -Value "oh-my-posh init pwsh | Invoke-Expression"
+Add-Content -Path $profile7 -Value "oh-my-posh init pwsh | Invoke-Expression"
 
 git clone https://github.com/NvChad/starter $ENV:USERPROFILE\AppData\Local\nvim; nvim
 
