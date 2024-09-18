@@ -35,32 +35,41 @@ Set-ExecutionPolicy Unrestricted
 winget-install -Force
 
 $programs = [ordered]@{
-	"Microsoft" = @(
-		"DevHome",
-		"PCManager",
-		"Office",
-		"OneDrive",
-		"VisualStudioCode",
-		"PowerShell",
-		"WindowsTerminal"
-	);
+	"TheBrowserCompany" = "Arc";
 	"Notion" = @(
 		"Notion",
 		"NotionCalendar"
 	);
-	"Adobe" = "CreativeCloud";
+	"" = @(
+		"9PKTQ5699M62",
+		"9PFHDD62MXS1"
+	);
+	"SlackTechnologies" = "Slack";
+	"Discord" = "Discord";
+	"Microsoft" = @(
+		"WindowsTerminal",
+		"VisualStudioCode",
+		"PowerShell",
+		"DevHome",
+		"Office",
+		"OneDrive",
+		"PCManager",
+	);
 	"Python" = "Python.3.12";
 	"JanDeDobbeleer" = "OhMyPosh";
 	"Git" = "Git";
 	"GitHub" = "GitHubDesktop";
 	"Neovim" = "Neovim";
-	"Gyan" = "FFmpeg";
-	"Discord" = "Discord"
+	"Gyan" = "FFmpeg"
 }
 
 foreach ($key in $programs.Keys) {
 	foreach ($value in $programs[$key]) {
-		winget install "$key.$value" --accept-package-agreements --accept-source-agreements
+		if ($key) {
+			winget install "$key.$value" --accept-package-agreements --accept-source-agreements
+		} else {
+			winget install "$value" --accept-package-agreements --accept-source-agreements
+		}
 	}
 }
 
@@ -111,10 +120,11 @@ Add-Content -Path $profile7 -Value "oh-my-posh init pwsh | Invoke-Expression"
 
 git clone https://github.com/NvChad/starter $ENV:USERPROFILE\AppData\Local\nvim; nvim
 
-Remove-Item "$ENV:USERPROFILE\Desktop\Notion.lnk" -Force
-Remove-Item "$ENV:USERPROFILE\Desktop\Notion Calendar.lnk" -Force
 Remove-Item "$ENV:USERPROFILE\Desktop\GitHub Desktop.lnk" -Force
 Remove-Item "$ENV:USERPROFILE\Desktop\Discord.lnk" -Force
+Remove-Item "$ENV:USERPROFILE\Desktop\Slack.lnk" -Force
+
+wsl --install
 :Install:
 
 :End
