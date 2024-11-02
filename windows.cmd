@@ -28,6 +28,8 @@ reg query HKCU\Console /v QuickEdit %nul2% | find /i "0x0" %nul1% || if not defi
 powershell.exe "cd %~dp0; $f=[io.file]::ReadAllText('%~f0') -Split ':Install\:.*'; Invoke-Expression ($f[1]);" & goto End
 
 :Install:
+Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+
 $programs = [ordered]@{
 	"Bitwarden" = "Bitwarden";
 	"Microsoft" = @(
