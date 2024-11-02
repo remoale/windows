@@ -35,17 +35,6 @@ Set-ExecutionPolicy Unrestricted
 winget-install -Force
 
 $programs = [ordered]@{
-	"TheBrowserCompany" = "Arc";
-	"Notion" = @(
-		"Notion",
-		"NotionCalendar"
-	);
-	"" = @(
-		"9PKTQ5699M62",
-		"9PFHDD62MXS1"
-	);
-	"SlackTechnologies" = "Slack";
-	"Discord" = "Discord";
 	"Microsoft" = @(
 		"WindowsTerminal",
 		"VisualStudioCode",
@@ -54,13 +43,24 @@ $programs = [ordered]@{
 		"Office",
 		"OneDrive",
 		"PCManager",
+		"PowerToys",
+		"Sysinternals"
+	);
+	"Notion" = @(
+		"Notion",
+		"NotionCalendar"
+	);
+	"" = @(
+		"9PKTQ5699M62",
+		"9PFHDD62MXS1"
 	);
 	"Python" = "Python.3.12";
 	"JanDeDobbeleer" = "OhMyPosh";
 	"Git" = "Git";
 	"GitHub" = "GitHubDesktop";
 	"Neovim" = "Neovim";
-	"Gyan" = "FFmpeg"
+	"Gyan" = "FFmpeg";
+	"Discord" = "Discord"
 }
 
 foreach ($key in $programs.Keys) {
@@ -122,7 +122,6 @@ git clone https://github.com/NvChad/starter $ENV:USERPROFILE\AppData\Local\nvim;
 
 Remove-Item "$ENV:USERPROFILE\Desktop\GitHub Desktop.lnk" -Force
 Remove-Item "$ENV:USERPROFILE\Desktop\Discord.lnk" -Force
-Remove-Item "$ENV:USERPROFILE\Desktop\Slack.lnk" -Force
 
 wsl --install
 :Install:
