@@ -50,7 +50,8 @@ $programs = [ordered]@{
 	);
 	"" = @(
 		"9PKTQ5699M62",
-		"9PFHDD62MXS1"
+		"9PFHDD62MXS1",
+		"9WZDNCRFJ3TJ"
 	);
 	"Python" = "Python.3.12";
 	"JanDeDobbeleer" = "OhMyPosh";
