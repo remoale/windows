@@ -31,6 +31,7 @@ powershell.exe "cd %~dp0; $f=[io.file]::ReadAllText('%~f0') -Split ':Install\:.*
 $programs = [ordered]@{
 	"Bitwarden" = "Bitwarden";
 	"Microsoft" = @(
+		"Edge",
 		"WindowsTerminal",
 		"VisualStudioCode",
 		"PowerShell",
