@@ -28,12 +28,6 @@ reg query HKCU\Console /v QuickEdit %nul2% | find /i "0x0" %nul1% || if not defi
 powershell.exe "cd %~dp0; $f=[io.file]::ReadAllText('%~f0') -Split ':Install\:.*'; Invoke-Expression ($f[1]);" & goto End
 
 :Install:
-Install-PackageProvider -Name "NuGet" -Force
-Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
-Install-Script winget-install -Force
-Set-ExecutionPolicy Unrestricted
-winget-install -Force
-
 $programs = [ordered]@{
 	"Microsoft" = @(
 		"WindowsTerminal",
@@ -73,8 +67,6 @@ foreach ($key in $programs.Keys) {
 	}
 }
 
-New-Item -Type File -Path $PROFILE -Force
-
 Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 
 choco install -y mingw make
@@ -113,6 +105,7 @@ $settings.profiles.defaults.font = @{
     face = $font
 }
 $settings | ConvertTo-Json -Depth 32 | Set-Content -Path $settingsPath
+New-Item -Type File -Path $PROFILE -Force
 Add-Content -Path $PROFILE -Value "oh-my-posh init pwsh | Invoke-Expression"
 $profile7 = "$ENV:USERPROFILE\Documents\PowerShell\Microsoft.PowerShell_profile.ps1"
 New-Item -Type File -Path $profile7 -Force
