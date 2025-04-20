@@ -43,6 +43,12 @@ powershell.exe "cd %~dp0; $f=[io.file]::ReadAllText('%~f0') -Split ':Settings\:.
 					"PackageIdentifier" : "Microsoft.VCRedist.2015+.x64"
 				},
 				{
+					"PackageIdentifier" : "Zen-Team.Zen-Browser"
+				},
+				{
+					"PackageIdentifier" : "JanDeDobbeleer.OhMyPosh"
+				},
+				{
 					"PackageIdentifier" : "7zip.7zip"
 				},
 				{
@@ -50,12 +56,6 @@ powershell.exe "cd %~dp0; $f=[io.file]::ReadAllText('%~f0') -Split ':Settings\:.
 				},
 				{
 					"PackageIdentifier" : "Proton.ProtonVPN"
-				},
-				{
-					"PackageIdentifier" : "Zen-Team.Zen-Browser"
-				},
-				{
-					"PackageIdentifier" : "JanDeDobbeleer.OhMyPosh"
 				},
 				{
 					"PackageIdentifier" : "Microsoft.VCRedist.2010.x64"
