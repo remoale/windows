@@ -204,15 +204,18 @@ foreach ($library in $libraries) {
 oh-my-posh.exe font install CascadiaCode
 $settingsPath = Resolve-Path "$ENV:USERPROFILE\AppData\Local\Packages\Microsoft.WindowsTerminal*\LocalState\settings.json"
 $settings = Get-Content -Path $settingsPath -Raw | ConvertFrom-Json
-$pwsh7Profile = $settings.profiles.list | Where-Object { $_.name -eq "PowerShell" }
 $font = "CaskaydiaCove NF"
 $settings.profiles.defaults = @{}
 $settings.profiles.defaults.font = @{
     face = $font
 }
 $settings | ConvertTo-Json -Depth 32 | Set-Content -Path $settingsPath
+
+# PowerShell Profile
 New-Item -Type File -Path $PROFILE -Force
 Add-Content -Path $PROFILE -Value "oh-my-posh init pwsh | Invoke-Expression"
+
+# PowerShell 7 Profile
 $profile7 = "$ENV:USERPROFILE\Documents\PowerShell\Microsoft.PowerShell_profile.ps1"
 New-Item -Type File -Path $profile7 -Force
 Add-Content -Path $profile7 -Value "oh-my-posh init pwsh | Invoke-Expression"
