@@ -199,12 +199,12 @@ foreach ($library in $libraries) {
 	pip install $library
 }
 
+# Windows Terminal
+# Font
 oh-my-posh.exe font install CascadiaCode
-
 $settingsPath = Resolve-Path "$ENV:USERPROFILE\AppData\Local\Packages\Microsoft.WindowsTerminal*\LocalState\settings.json"
 $settings = Get-Content -Path $settingsPath -Raw | ConvertFrom-Json
 $pwsh7Profile = $settings.profiles.list | Where-Object { $_.name -eq "PowerShell" }
-$settings.defaultProfile = $pwsh7Profile.guid
 $font = "CaskaydiaCove NF"
 $settings.profiles.defaults = @{}
 $settings.profiles.defaults.font = @{
@@ -216,6 +216,11 @@ Add-Content -Path $PROFILE -Value "oh-my-posh init pwsh | Invoke-Expression"
 $profile7 = "$ENV:USERPROFILE\Documents\PowerShell\Microsoft.PowerShell_profile.ps1"
 New-Item -Type File -Path $profile7 -Force
 Add-Content -Path $profile7 -Value "oh-my-posh init pwsh | Invoke-Expression"
+
+# Default WSL Profile
+$wslProfile = $settings.profiles.list | Where-Object { $_.name -eq "Ubuntu" }
+$settings.defaultProfile = $wslProfile.guid
+$settings | ConvertTo-Json -Depth 32 | Set-Content -Path $settingsPath
 :Settings:
 
 :End
