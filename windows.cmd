@@ -43,9 +43,6 @@ powershell.exe "cd %~dp0; $f=[io.file]::ReadAllText('%~f0') -Split ':Settings\:.
 					"PackageIdentifier" : "7zip.7zip"
 				},
 				{
-					"PackageIdentifier" : "Git.Git"
-				},
-				{
 					"PackageIdentifier" : "Microsoft.Office"
 				},
 				{
@@ -59,12 +56,6 @@ powershell.exe "cd %~dp0; $f=[io.file]::ReadAllText('%~f0') -Split ':Settings\:.
 				},
 				{
 					"PackageIdentifier" : "Microsoft.VCRedist.2010.x64"
-				},
-				{
-					"PackageIdentifier" : "OpenJS.NodeJS"
-				},
-				{
-					"PackageIdentifier" : "GitHub.cli"
 				},
 				{
 					"PackageIdentifier" : "Microsoft.PowerShell"
@@ -112,9 +103,6 @@ powershell.exe "cd %~dp0; $f=[io.file]::ReadAllText('%~f0') -Split ':Settings\:.
 					"PackageIdentifier" : "Notion.NotionCalendar"
 				},
 				{
-					"PackageIdentifier" : "Python.Python.3.13"
-				},
-				{
 					"PackageIdentifier" : "Anysphere.Cursor"
 				},
 				{
@@ -135,9 +123,6 @@ powershell.exe "cd %~dp0; $f=[io.file]::ReadAllText('%~f0') -Split ':Settings\:.
 				{
 					"PackageIdentifier" : "Microsoft.WSL"
 				},
-				{
-					"PackageIdentifier" : "Gyan.FFmpeg"
-				}
 			],
 			"SourceDetails" : 
 			{
