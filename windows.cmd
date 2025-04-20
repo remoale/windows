@@ -173,6 +173,9 @@ Set-ItemProperty -Path $explorerPath -Name "HideFileExt" -Value 0
 
 Write-Output "✅ Developer settings enabled successfully."
 
+# Refresh
+$env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
+
 # Windows Terminal
 # Font
 oh-my-posh.exe font install CascadiaCode
