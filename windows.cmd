@@ -173,17 +173,6 @@ Set-ItemProperty -Path $explorerPath -Name "HideFileExt" -Value 0
 
 Write-Output "✅ Developer settings enabled successfully."
 
-# Python
-$libraries = @(
-	"numpy",
-	"pandas",
-	"yt-dlp"
-)
-
-foreach ($library in $libraries) {
-	pip install $library
-}
-
 # Windows Terminal
 # Font
 oh-my-posh.exe font install CascadiaCode
