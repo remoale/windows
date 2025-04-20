@@ -26,7 +26,7 @@ reg query HKCU\Console /v QuickEdit %nul2% | find /i "0x0" %nul1% || if not defi
 )
 
 powershell.exe "cd %~dp0; $f=[io.file]::ReadAllText('%~f0') -Split ':Programs\:.*'; Set-Content -Path 'programs.json' -Value ($f[1]); winget import -i 'programs.json' --accept-package-agreements --accept-source-agreements; Remove-Item -Recurse $ENV:USERPROFILE\Desktop\*.lnk"
-del programs.json
+del "%~dp0\programs.json"
 
 powershell.exe "cd %~dp0; $f=[io.file]::ReadAllText('%~f0') -Split ':Settings\:.*'; Invoke-Expression ($f[1]);" & goto End
 
@@ -39,6 +39,9 @@ powershell.exe "cd %~dp0; $f=[io.file]::ReadAllText('%~f0') -Split ':Settings\:.
 		{
 			"Packages" : 
 			[
+				{
+					"PackageIdentifier" : "Microsoft.VCRedist.2015+.x64"
+				},
 				{
 					"PackageIdentifier" : "7zip.7zip"
 				},
@@ -83,9 +86,6 @@ powershell.exe "cd %~dp0; $f=[io.file]::ReadAllText('%~f0') -Split ':Settings\:.
 				},
 				{
 					"PackageIdentifier" : "Microsoft.VCRedist.2015+.x86"
-				},
-				{
-					"PackageIdentifier" : "Microsoft.VCRedist.2015+.x64"
 				},
 				{
 					"PackageIdentifier" : "Microsoft.VCRedist.2012.x64"
@@ -178,7 +178,7 @@ Write-Output "✅ Developer settings enabled successfully."
 oh-my-posh.exe font install CascadiaCode
 $settingsPath = Resolve-Path "$ENV:USERPROFILE\AppData\Local\Packages\Microsoft.WindowsTerminal*\LocalState\settings.json"
 $settings = Get-Content -Path $settingsPath -Raw | ConvertFrom-Json
-$font = "CaskaydiaCove NF"
+$font = "CaskaydiaCove Nerd Font"
 $settings.profiles.defaults = @{}
 $settings.profiles.defaults.font = @{
     face = $font
