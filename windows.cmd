@@ -185,14 +185,10 @@ $settings.profiles.defaults.font = @{
 }
 $settings | ConvertTo-Json -Depth 32 | Set-Content -Path $settingsPath
 
-# PowerShell Profile
-New-Item -Type File -Path $PROFILE -Force
-Add-Content -Path $PROFILE -Value "oh-my-posh init pwsh | Invoke-Expression"
-
-# PowerShell 7 Profile
+# PowerShell Profiles
 $profile7 = "$ENV:USERPROFILE\Documents\PowerShell\Microsoft.PowerShell_profile.ps1"
 New-Item -Type File -Path $profile7 -Force
-Add-Content -Path $profile7 -Value "oh-my-posh init pwsh | Invoke-Expression"
+Add-Content -Path $PROFILE, $profile7 -Value "oh-my-posh init pwsh | Invoke-Expression"
 
 # WSL
 wsl --install
