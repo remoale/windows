@@ -120,9 +120,6 @@ powershell.exe "cd %~dp0; $f=[io.file]::ReadAllText('%~f0') -Split ':Settings\:.
 				{
 					"PackageIdentifier" : "Microsoft.WindowsTerminal"
 				},
-				{
-					"PackageIdentifier" : "Microsoft.WSL"
-				},
 			],
 			"SourceDetails" : 
 			{
@@ -196,6 +193,9 @@ Add-Content -Path $PROFILE -Value "oh-my-posh init pwsh | Invoke-Expression"
 $profile7 = "$ENV:USERPROFILE\Documents\PowerShell\Microsoft.PowerShell_profile.ps1"
 New-Item -Type File -Path $profile7 -Force
 Add-Content -Path $profile7 -Value "oh-my-posh init pwsh | Invoke-Expression"
+
+# WSL
+wsl --install
 
 # Default WSL Profile
 $wslProfile = $settings.profiles.list | Where-Object { $_.name -eq "Ubuntu" }
